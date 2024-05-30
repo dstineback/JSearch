@@ -1,0 +1,332 @@
+﻿@page "{handler?}"
+@model DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
+    .job-description-column {
+        width: !important 100px;
+        /* You can add additional styles here if needed */
+    }
+</style>
+
+<h1>Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-total">
+            <div class="card-body">
+                <h5 class="card-title">Total Submissions</h5>
+                <p class="card-text">@Model.TotalSubmissions</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-pending">
+            <div class="card-body">
+                <h5 class="card-title">Pending Submissions</h5>
+                <p class="card-text">@Model.PendingSubmissions</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-denied">
+            <div class="card-body">
+                <h5 class="card-title">Denied Submissions</h5>
+                <p class="card-text">@Model.DeniedSubmissions</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h3>Submissions Grid</h3>
+    <div class="table-responsive">
+        <table id="myTable" class="display compact hover order-column" style="width:100%">
+            <thead>
+                <tr>
+                    <th style="width: 150px;" >Position</th>
+                    <th style="width: 150px;">Company</th>
+                    <th class="job-description-column" style="width: 100px;">WebSite</th>
+                    <th style="width: 150px;">Contact Name</th>
+                    <th style="width: 150px;">Contact Email</th>
+                    <th style="width: 150px;">Contact Phone</th>
+                    <th style="width: 150px;"> Status</th>
+                    <th style="display:none;" class="job-description-column">Job Description</th>
+                    <th style="width: 150px;">Referral Type</th>
+                    <th style="width: 150px;">Referral Contact Name</th>
+                    <th style="width: 150px;">Referral Contact Email</th>
+                    <th style="width: 150px;">Referral Phone</th>
+                    <th style="width: 150px;">First Contact</th>
+                    <th style="width: 150px;">Follow-Up Contact</th>
+                    <th style="width: 150px;">Denied Date</th>
+                    <th style="display: none;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var submission in Model.Submissions)
+                {
+                    <tr style="font-size: 12px;" data-bs-toggle="modal" data-bs-target="#submissionModal" >
+                        <td style="width: 150px;">@submission.Position</td>
+                        <td style="width: 150px;">@submission.Company</td>
+                        <td class="job-description-column" style="width: 100px;">@submission.Website</td>
+                        <td style="width: 150px;">@submission.ContactName</td>
+                        <td style="width: 150px;">@submission.ContactEmail</td>
+                        <td style="width: 150px;">@submission.ContactPhone</td>
+                        <td style="width: 150px;">@submission.FormattedStatus</td>
+                        <td style="display:none;">@submission.JobDescription</td>
+                        <td style="width: 150px;">@submission.FormattedRefType</td>
+                        <td style="width: 150px;">@submission.ReferralContactName</td>
+                        <td style="width: 150px;">@submission.ReferralContactEmail</td>
+                        <td style="width: 150px;">@submission.ReferralPhone</td>
+                        <td style="width: 150px;">@submission.FormattedFirstContact</td>
+                        <td style="width: 150px;">@submission.FormattedFollowupContact</td>
+                        <td style="width: 150px;">@submission.DeniedDate</td>
+                        <td style="display:none;">@submission.SubmissionId</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="submissionModal" tabindex="-1" aria-labelledby="submissionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="submissionModalLabel">Submission Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+         
+                <div class="modal-body">
+                    <!-- Modal content will go here -->
+                </div>
+           
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="updateBtn">Update</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">Update Submission Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="save">
+                    <div class="form-group">
+                        <label>Company: </label>
+                        <input class="form-control" type="text" id="companyName" name="companyName" value="@Model.SelectedSubmission.Company" />
+                    </div>
+                    <div class="form-group">
+                        <label>Position</label>
+                        <input class="form-control" type="text" id="position" name="position" value="@Model.SelectedSubmission.Position" />
+                    </div>
+                    <div class="form-group">
+                        <label for="referralType">Referral Type:</label>
+                        <select class="form-control" id="referralType" asp-for="@Model.SelectedSubmission.ReferralType">
+                            <option value="0">Internet</option>
+                            <option value="1">Personal</option>
+                            <option value="2">Friend</option>
+                            <option value="3">Recruiter</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Status:</label>
+                        <select class="form-control" id="status" asp-for="@Model.SelectedSubmission.Status">
+                            <option value="0">New</option>
+                            <option value="1">Submitted</option>
+                            <option value="2">Interviewing</option>
+                            <option value="3">Denied</option>
+                        </select>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-md-6>">
+                            <label for="website">Web Site</label>
+                            <input type="text" class="form-control" id="website" asp-for="@Model.SelectedSubmission.Website" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="contactName">Contact Name:</label>
+                                <input type="text" class="form-control" id="contactName" asp-for="@Model.SelectedSubmission.ContactName">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="contactEmail">Contact Email:</label>
+                                <input type="email" class="form-control" id="contactEmail" asp-for="@Model.SelectedSubmission.ContactEmail">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="contactPhone">Contact Phone:</label>
+                                <input type="tel" class="form-control" id="contactPhone" asp-for="@Model.SelectedSubmission.ContactPhone">
+                            </div>
+                        </div>
+                        </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="referralContactName">Referral Contact Name:</label>
+                                <input type="text" class="form-control" id="referralContactName" asp-for="@Model.SelectedSubmission.ReferralContactName">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="referralContactEmail">Referral Contact Email:</label>
+                                <input type="email" class="form-control" id="referralContactEmail" asp-for="@Model.SelectedSubmission.ReferralContactEmail">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="referralPhone">Referral Phone:</label>
+                                <input type="tel" class="form-control" id="referralPhone" asp-for="@Model.SelectedSubmission.ReferralPhone">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="jobDescription">Job Description:</label>
+                                <textarea class="form-control" id="jobDescription" rows="5" asp-for="@Model.SelectedSubmission.JobDescription"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var csrfToken = $('input[name="__RequestVerificationToken"]').val();
+
+        $(document).ready(function () {
+            new DataTable('#myTable', {
+                order: [[12, 'desc']]
+                            
+            });
+
+            // Click event handler for table rows
+            $('#myTable tbody').on('click', 'tr', function () {
+                // Get the data from the clicked row
+                var rowData = $(this).find('td').map(function () {
+                    return $(this).text();
+                }).get();
+
+               
+                openSubmissionModalFromRow(rowData);
+                
+            });
+
+            $('#saveBtn').click(function () {
+                let id = $('#hiddenInputField').val();
+                let status = $('#status').val();
+                let position =  $('#position').val();
+                let company = $('#companyName').val();
+                let contactName = $('#contactName').val();
+                let contactEmail = $('#contactEmail').val();
+                let contactPhone = $('#contactPhone').val();
+                let referralPhone = $('#referralPhone').val();
+                let referralContactEmail = $('#referralContactEmail').val();
+                let referralContactName = $('#referralContactName').val();
+                let jobDescription = $('#jobDescription').val();
+                let referralType = $('#referralType').val();
+                let website = $('#website').val();
+
+
+                var data = {
+                    "Status" : status.toString(),
+                    "Position" : position,
+                    "Company" : company,
+                    "SubmissionId" : id.toString(),
+                    "ContactPhone" : contactPhone,
+                    "ContactEmail": contactEmail,
+                    "ContactName" : contactName,
+                    "JobDescription" : jobDescription,
+                    "ReferralType" : referralType.toString(),
+                    "ReferralContactName" : referralContactName,
+                    "ReferralContactEmail" : referralContactEmail,
+                    "ReferralPhone" : referralPhone,
+                    "Website" : website
+                    
+                }
+
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/Dashboard?handler=Save', // Update with your actual controller and action method
+                    data: data,
+                    headers: {
+                        // Include the CSRF token in the request headers
+                        'RequestVerificationToken': csrfToken
+                    },
+                    success: function (response) {
+                        // Handle success response, e.g., close modal or show success message
+                        $('#updateModal').modal('hide');
+                        var table = $('myTable');
+
+                       table.html(response);
+                        
+
+                        
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error response, e.g., display error message
+                        console.log(xhr.responseText);
+                    }
+                });
+
+            });
+
+            // Handle click event on the Update button
+            $('#updateBtn').click(function () {
+                // Get the form data
+                let id = $('#hiddenInputField').val();
+
+              
+                // Perform an AJAX request to update the data
+                $.ajax({
+                    type: 'Get',
+                    url: '/Dashboard?handler=Update', // Update with your actual controller and action method
+                    data: { id: id },
+                    headers: {
+                        // Include the CSRF token in the request headers
+                        'RequestVerificationToken': csrfToken
+                    },
+                    success: function (response) {
+                        // Handle success response, e.g., close modal or show success message
+                        $('#submissionModal').modal('hide');
+                        openUpdateModal(response);
+                        // Optionally update the view with the new data
+                        // Example: $('#targetElement').html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error response, e.g., display error message
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}

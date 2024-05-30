@@ -1,0 +1,64 @@
+﻿@model Models.Submissions
+
+<!-- Modal -->
+<div class="modal fade" id="submissionModal" tabindex="-1" aria-labelledby="submissionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="submissionModalLabel">Submission Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="updateForm">
+                <!-- Add an ID to the form for easier access in JavaScript -->
+                <div class="modal-body">
+                    <!-- Editable form inputs -->
+                    <label class="form-label" for="company">Company:</label>
+                    <input class="form-control-sm" type="text" id="company" name="Company" value="@Model.Company" />
+
+                    <label class="form-label" for="position">Position:</label>
+                    <input class="form-control-sm" type="text" id="position" name="Position" value="@Model.Position" />
+
+                    <label class="form-label" for="description">Description:</label>
+                    <textarea class="form-control-lg" type="text" id="description" name="Description" value="@Model.JobDescription" />
+
+                    <!-- Add other fields as needed -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="updateBtn">Update</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <!-- JavaScript/jQuery code -->
+    <script>
+     
+            // Handle click event on the Update button
+            $('#updateBtn').click(function () {
+                // Get the form data
+                var formData = $('#updateForm').serialize();
+
+                // Perform an AJAX request to update the data
+                $.ajax({
+                    type: 'POST',
+                    url: '/Dashboard/Update', // Update with your actual controller and action method
+                    data: formData,
+                    success: function (response) {
+                        // Handle success response, e.g., close modal or show success message
+                        $('#submissionModal').modal('hide');
+                        // Optionally update the view with the new data
+                        // Example: $('#targetElement').html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error response, e.g., display error message
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+        
+    </script>
+}

@@ -1,0 +1,127 @@
+﻿@page
+@inject IConfiguration configuration
+@using JSearch.Services
+@{
+    Connections connections = new Connections(configuration);
+}
+@model SubmissionsModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submission Form</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Submission Form</h1>
+        <form method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="position">Position:</label>
+                        <input type="text" class="form-control" id="position" asp-for="SubmissionsData.Position">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="company">Company:</label>
+                        <input type="text" class="form-control" id="company" asp-for="SubmissionsData.Company">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6>">
+                    <label for="website">Web Site</label>
+                    <input type="text" class="form-control" id="website" asp-for="SubmissionsData.Website" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="contactName">Contact Name:</label>
+                        <input type="text" class="form-control" id="contactName" asp-for="SubmissionsData.ContactName">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="contactEmail">Contact Email:</label>
+                        <input type="email" class="form-control" id="contactEmail" asp-for="SubmissionsData.ContactEmail">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="contactPhone">Contact Phone:</label>
+                        <input type="tel" class="form-control" id="contactPhone" asp-for="SubmissionsData.ContactPhone">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="status">Status:</label>
+                        <select class="form-control" id="status" asp-for="SubmissionsData.Status">
+                            <option value="0">New</option>
+                            <option value="1">Submitted</option>
+                            <option value="2">Interviewing</option>
+                            <option value="3">Denied</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="referralType">Referral Type:</label>
+                        <select class="form-control" id="referralType" asp-for="SubmissionsData.ReferralType">
+                            <option value="0">Internet</option>
+                            <option value="1">Personal</option>
+                            <option value="2">Friend</option>
+                            <option value="3">Recruiter</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="referralPhone">Referral Phone:</label>
+                        <input type="tel" class="form-control" id="referralPhone" asp-for="SubmissionsData.ReferralPhone">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="referralContactName">Referral Contact Name:</label>
+                        <input type="text" class="form-control" id="referralContactName" asp-for="SubmissionsData.ReferralContactName">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="referralContactEmail">Referral Contact Email:</label>
+                        <input type="email" class="form-control" id="referralContactEmail" asp-for="SubmissionsData.ReferralContactEmail">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="jobDescription">Job Description:</label>
+                        <textarea class="form-control" id="jobDescription" rows="5" asp-for="SubmissionsData.JobDescription"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
