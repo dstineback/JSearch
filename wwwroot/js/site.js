@@ -8,8 +8,8 @@ function openSubmissionModalFromRow(rowData) {
     $('#submissionModal .modal-body').html('<p><strong>Company:</strong> ' + rowData[1] + '</p>' +
         '<p><strong>Position:</strong> ' + rowData[0] + '</p>' +
         '<p><strong>Date Applied:</strong> ' + rowData[12] + '</p>' +
+        '<p><strong>Website: </strong>' + rowData[2] + '</p>' +
         '<p><string>Description: </strong>  ' + rowData[7] + '<p>' +
-        '<p style="display:none;">' + rowData[13] + '</p>' +
         '<input type="hidden" id="hiddenInputField" name="hiddenInputField" value="' + rowData[15] + '" />' // Set value for hidden input field
     );
 
